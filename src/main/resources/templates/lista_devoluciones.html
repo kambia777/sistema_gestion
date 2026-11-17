@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Devoluciones</title>
+</head>
+<body>
+
+<h1>Lista de Devoluciones</h1>
+
+<a href="/devoluciones/nueva">➕ Nueva Devolución</a>
+<br><br>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Venta</th>
+        <th>Motivo</th>
+        <th>Acción</th>
+    </tr>
+
+    <tr th:each="d : ${devoluciones}">
+        <td th:text="${d.id}"></td>
+        <td th:text="${d.fecha}"></td>
+        <td th:text="${d.venta.id}"></td>
+        <td th:text="${d.motivo}"></td>
+        <td>
+            <a th:href="@{'/devoluciones/' + ${d.id}}">Ver</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard Stock</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">📊 Dashboard de Stock</h1>
+
+    <!-- 🔹 RESUMEN -->
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5>Total Productos</h5>
+                    <h3 th:text="${#lists.size(stock)}"></h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5>Stock Total</h5>
+                    <h3 th:text="${totalStock}"></h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5>Stock Bajo</h5>
+                    <h3 th:text="${stockBajo}"></h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 🔍 FILTRO -->
+    <input type="text" id="filtro" class="form-control mb-3" placeholder="Buscar por polo...">
+
+    <!-- 📋 TABLA -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Polo</th>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>Almacén</th>
+                <th>Tienda</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaStock">
+            <tr th:each="s : ${stock}">
+                <td th:text="${s.polo}"></td>
+                <td th:text="${s.talla}"></td>
+                <td th:text="${s.color}"></td>
+                <td th:text="${s.stockAlmacen}"></td>
+                <td th:text="${s.stockTienda}"></td>
+                <td th:text="${s.stockAlmacen + s.stockTienda}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<!-- 🔥 SCRIPT FILTRO -->
+<script>
+document.getElementById("filtro").addEventListener("keyup", function() {
+    let valor = this.value.toLowerCase();
+    let filas = document.querySelectorAll("#tablaStock tr");
+
+    filas.forEach(fila => {
+        let texto = fila.innerText.toLowerCase();
+        fila.style.display = texto.includes(valor) ? "" : "none";
+    });
+});
+</script>
+
+</body>
+</html>

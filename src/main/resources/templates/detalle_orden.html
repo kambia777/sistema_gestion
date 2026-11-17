@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle Orden</title>
+</head>
+<body>
+
+<h1>Detalle de Orden de Producción</h1>
+
+<!-- ===================== -->
+<!-- DATOS GENERALES -->
+<!-- ===================== -->
+
+<p><b>ID:</b> <span th:text="${orden.id}"></span></p>
+
+<p><b>Fecha:</b> <span th:text="${orden.fecha}"></span></p>
+
+<p><b>Responsable:</b> <span th:text="${orden.responsable}"></span></p>
+
+<p><b>Estado:</b> <span th:text="${orden.estado}"></span></p>
+
+<p><b>Observaciones:</b> <span th:text="${orden.observaciones}"></span></p>
+
+<hr>
+
+<!-- ===================== -->
+<!-- DETALLES -->
+<!-- ===================== -->
+
+<h2>Detalles de Producción</h2>
+
+<table border="1">
+    <tr>
+        <th>Polo</th>
+        <th>Talla</th>
+        <th>Color</th>
+        <th>Cantidad</th>
+    </tr>
+
+    <tr th:each="d : ${orden.detalles}">
+        <td th:text="${d.polo.nombre}"></td>
+        <td th:text="${d.talla.nombre}"></td>
+        <td th:text="${d.color.nombre}"></td>
+        <td th:text="${d.cantidad}"></td>
+    </tr>
+</table>
+
+<br>
+
+<!-- ===================== -->
+<!-- BOTONES -->
+<!-- ===================== -->
+
+<a href="/ordenes">⬅ Volver</a>
+
+</body>
+</html>

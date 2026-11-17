@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Órdenes de Producción</title>
+</head>
+<body>
+
+<h1>Lista de Órdenes de Producción</h1>
+
+<a href="/ordenes/nueva">➕ Nueva Orden</a>
+	<br><br>
+
+<form method="get" action="/ordenes">
+
+    <label>ID:</label>
+    <input type="number" name="id">
+
+    <label>Estado:</label>
+    <select name="estado">
+        <option value="">--Todos--</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Completada">Completada</option>
+    </select>
+
+    <button type="submit">Filtrar</button>
+	
+	
+</form>
+
+
+
+<br>
+
+<table border="1">
+	
+	<tr>
+	    <th>ID</th>
+	    <th>Fecha</th>
+	    <th>Responsable</th>
+	    <th>Estado</th>
+	    <th>Acciones</th>
+	</tr>
+
+	<tr th:each="o : ${ordenes}">
+	    <td th:text="${o.id}"></td>
+	    <td th:text="${o.fecha}"></td>
+	    <td th:text="${o.responsable}"></td>
+	    <td th:text="${o.estado}"></td>
+
+	    <td>
+			<a th:href="@{'/ordenes/' + ${o.id}}">Ver</a>
+			|
+			<a th:href="@{'/ordenes/editar/' + ${o.id}}">Editar</a>
+	    </td>
+	</tr>
+
+</table>
+
+</body>
+</html>

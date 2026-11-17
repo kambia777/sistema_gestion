@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ventas por tienda</title>
+</head>
+<body>
+
+<h1>Ventas de la tienda</h1>
+
+<h2 th:text="${tienda.nombre}"></h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Acción</th>
+    </tr>
+
+    <tr th:each="v : ${ventas}">
+        <td th:text="${v.id}"></td>
+        <td th:text="${v.fecha}"></td>
+        <td th:text="${v.total}"></td>
+        <td>
+            <a th:href="@{'/ventas/' + ${v.id}}">Ver</a>
+        </td>
+    </tr>
+</table>
+
+<a href="/ventas">Volver</a>
+
+</body>
+</html>

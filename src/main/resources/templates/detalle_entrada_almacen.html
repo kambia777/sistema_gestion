@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle Entrada</title>
+</head>
+<body>
+
+<h1>Detalle de Entrada</h1>
+
+<!-- 📋 DATOS GENERALES -->
+<p><strong>ID:</strong> <span th:text="${entrada.id}"></span></p>
+<p><strong>Fecha:</strong> <span th:text="${entrada.fecha}"></span></p>
+<p><strong>Observaciones:</strong> <span th:text="${entrada.observaciones}"></span></p>
+
+<br>
+
+<!-- 📦 DETALLES -->
+<h2>Productos</h2>
+
+<table border="1">
+    <tr>
+        <th>Polo</th>
+        <th>Talla</th>
+        <th>Color</th>
+        <th>Cantidad</th>
+    </tr>
+
+    <tr th:each="d : ${entrada.detalles}">
+        <td th:text="${d.polo.nombre}"></td>
+        <td th:text="${d.talla.nombre}"></td>
+        <td th:text="${d.color.nombre}"></td>
+        <td th:text="${d.cantidad}"></td>
+    </tr>
+</table>
+
+<br>
+
+<!-- 🔙 NAVEGACIÓN -->
+<a href="/entradas">⬅ Volver a lista</a>
+
+</body>
+</html>

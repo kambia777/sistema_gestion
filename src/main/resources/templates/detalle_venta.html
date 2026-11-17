@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle de Venta</title>
+</head>
+<body>
+
+<h1>Detalle de Venta</h1>
+
+<p><b>ID:</b> <span th:text="${venta.id}"></span></p>
+<p><b>Fecha:</b> <span th:text="${venta.fecha}"></span></p>
+<p><b>Tienda:</b> <span th:text="${venta.tienda.nombre}"></span></p>
+<p><b>Total:</b> <span th:text="${venta.total}"></span></p>
+
+<h2>Productos vendidos</h2>
+
+<table border="1">
+    <tr>
+        <th>Polo</th>
+        <th>Talla</th>
+        <th>Color</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Subtotal</th>
+    </tr>
+
+    <tr th:each="d : ${venta.detalles}">
+        <td th:text="${d.polo.nombre}"></td>
+        <td th:text="${d.talla.nombre}"></td>
+        <td th:text="${d.color.nombre}"></td>
+        <td th:text="${d.cantidad}"></td>
+        <td th:text="${d.precioUnitario}"></td>
+        <td th:text="${d.cantidad * d.precioUnitario}"></td>
+    </tr>
+</table>
+
+<br>
+
+<h3>Total: <span th:text="${venta.total}"></span></h3>
+
+<br>
+<a href="/ventas">⬅ Volver a ventas</a>
+
+</body>
+</html>

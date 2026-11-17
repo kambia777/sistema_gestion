@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Salidas</title>
+</head>
+<body>
+
+<h1>Salidas de Almacén</h1>
+
+<a href="/salidas/nueva">➕ Nueva salida</a>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Tienda</th>
+        <th>Observaciones</th>
+        <th>Acción</th>
+    </tr>
+
+    <tr th:each="s : ${salidas}">
+        <td th:text="${s.id}"></td>
+        <td th:text="${s.fecha}"></td>
+        <td th:text="${s.tienda.nombre}"></td>
+        <td th:text="${s.observaciones}"></td>
+        <td>
+            <a th:href="@{'/salidas/' + ${s.id}}">Ver</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nueva Venta</title>
+</head>
+<body>
+
+<h1>Nueva Venta</h1>
+
+<form action="/ventas/guardar" method="post" onsubmit="return validarFormulario()">
+
+    <label>Fecha:</label>
+    <input type="date" name="fecha"><br><br>
+
+    <label>Tienda:</label>
+    <select name="tienda.id">
+        <option th:each="t : ${tiendas}"
+                th:value="${t.id}"
+                th:text="${t.nombre}">
+        </option>
+    </select><br><br>
+
+    <h2>Detalles</h2>
+
+    <table border="1" id="tablaDetalles">
+        <tr>
+            <th>Polo</th>
+            <th>Talla</th>
+            <th>Color</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th></th>
+        </tr>
+    </table>
+
+    <br>
+    <button type="button" onclick="agregarFila()">➕ Agregar producto</button>
+
+    <br><br>
+    <button type="submit">Guardar Venta</button>
+
+</form>
+
+<!-- 🔥 DATOS DESDE BACKEND -->
+<script th:inline="javascript">
+let polos = [[${polos}]];
+let tallas = [[${tallas}]];
+let colores = [[${colores}]];
+</script>
+
+<script>
+let index = 0;
+
+function generarOpciones(lista) {
+    let opciones = '<option value="">Seleccione</option>';
+    lista.forEach(item => {
+        opciones += `<option value="${item.id}">${item.nombre}</option>`;
+    });
+    return opciones;
+}
+
+function agregarFila() {
+
+    const tabla = document.getElementById("tablaDetalles");
+
+    const fila = `
+        <tr>
+            <td><select name="detalles[${index}].polo.id">${generarOpciones(polos)}</select></td>
+            <td><select name="detalles[${index}].talla.id">${generarOpciones(tallas)}</select></td>
+            <td><select name="detalles[${index}].color.id">${generarOpciones(colores)}</select></td>
+            <td><input type="number" name="detalles[${index}].cantidad" min="1"></td>
+            <td><input type="number" step="0.01" name="detalles[${index}].precioUnitario"></td>
+            <td><button type="button" onclick="eliminarFila(this)">❌</button></td>
+        </tr>
+    `;
+
+    tabla.insertAdjacentHTML('beforeend', fila);
+    index++;
+}
+
+function eliminarFila(btn) {
+    btn.parentNode.parentNode.remove();
+    reindexar();
+}
+
+function reindexar() {
+    const filas = document.querySelectorAll("#tablaDetalles tr");
+    let i = 0;
+
+    filas.forEach((fila, idx) => {
+        if (idx === 0) return;
+
+        const selects = fila.querySelectorAll("select");
+        const inputs = fila.querySelectorAll("input");
+
+        selects[0].name = `detalles[${i}].polo.id`;
+        selects[1].name = `detalles[${i}].talla.id`;
+        selects[2].name = `detalles[${i}].color.id`;
+
+        inputs[0].name = `detalles[${i}].cantidad`;
+        inputs[1].name = `detalles[${i}].precioUnitario`;
+
+        i++;
+    });
+
+    index = i;
+}
+
+function validarFormulario() {
+    const filas = document.querySelectorAll("#tablaDetalles tr").length;
+
+    if (filas <= 1) {
+        alert("Debes agregar al menos un producto");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

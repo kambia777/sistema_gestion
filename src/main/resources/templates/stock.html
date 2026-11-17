@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stock</title>
+
+    
+
+</head>
+
+<body>
+
+<h2>📦 Stock por Tiendas</h2>
+
+<!-- FILTROS -->
+<div>
+    <select id="filtroTienda">
+        <option value="">Todas las tiendas</option>
+        <option th:each="t : ${tiendas}" th:text="${t.nombre}"></option>
+    </select>
+
+    <select id="filtroPolo">
+        <option value="">Todos los polos</option>
+        <option th:each="p : ${polos}" th:text="${p.nombre}"></option>
+    </select>
+
+    <select id="filtroTalla">
+        <option value="">Todas las tallas</option>
+        <option th:each="t : ${tallas}" th:text="${t.nombre}"></option>
+    </select>
+
+    <select id="filtroColor">
+        <option value="">Todos los colores</option>
+        <option th:each="c : ${colores}" th:text="${c.nombre}"></option>
+    </select>
+	
+	<button type="button" onclick="filtrarTabla()">🔍 Aplicar filtros</button>
+</div>
+
+<br>
+
+<table id="tablaStock" border="1">
+	<thead>
+    <tr>
+        <th>Polo</th>
+        <th>Talla</th>
+        <th>Color</th>
+        <th>Stock Almacén</th>
+		<th>Tienda</th>
+        <th>Stock Tienda</th>
+		<th>Ventas</th>
+        <th>Total</th>
+    </tr>
+	</thead>
+	<tbody>
+    <tr th:each="s : ${stock}">
+        <td th:text="${s.polo}"></td>
+        <td th:text="${s.talla}"></td>
+        <td th:text="${s.color}"></td>
+        <td th:text="${s.stockAlmacen}"></td>
+		<td th:text="${s.tienda}"></td>
+        <td th:text="${s.stockTienda}"></td>
+		<td th:text="${s.ventas}"></td>
+        <td th:text="${s.stockAlmacen + s.stockTienda - s.ventas}"></td>
+    </tr>
+	</tbody>
+</table>
+
+
+<script>
+        function filtrarTabla() {
+            let tienda = document.getElementById("filtroTienda").value.toLowerCase();
+            let polo = document.getElementById("filtroPolo").value.toLowerCase();
+            let talla = document.getElementById("filtroTalla").value.toLowerCase();
+            let color = document.getElementById("filtroColor").value.toLowerCase();
+
+            let filas = document.querySelectorAll("#tablaStock tbody tr");
+
+            filas.forEach(fila => {
+                let t = fila.querySelector(".tienda").innerText.toLowerCase();
+                let p = fila.querySelector(".polo").innerText.toLowerCase();
+                let ta = fila.querySelector(".talla").innerText.toLowerCase();
+                let c = fila.querySelector(".color").innerText.toLowerCase();
+
+                if (
+                    (tienda === "" || t.includes(tienda)) &&
+                    (polo === "" || p.includes(polo)) &&
+                    (talla === "" || ta.includes(talla)) &&
+                    (color === "" || c.includes(color))
+                ) {
+                    fila.style.display = "";
+                } else {
+                    fila.style.display = "none";
+                }
+            });
+        }
+
+    </script>
+
+</body>
+
+
+</html>

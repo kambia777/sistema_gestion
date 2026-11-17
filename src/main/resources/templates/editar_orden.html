@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Orden</title>
+</head>
+<body>
+
+<h1>Editar Orden</h1>
+
+<form th:action="@{'/ordenes/actualizar/' + ${orden.id}}"
+      method="post"
+      onsubmit="return validarFormulario()">
+
+    <!-- ===================== -->
+    <!-- DATOS PRINCIPALES -->
+    <!-- ===================== -->
+
+    <input type="date" name="fecha" th:value="${orden.fecha}"><br><br>
+
+    <input type="text" name="responsable" th:value="${orden.responsable}"><br><br>
+
+    <select name="estado">
+        <option value="Pendiente" th:selected="${orden.estado == 'Pendiente'}">Pendiente</option>
+        <option value="Completada" th:selected="${orden.estado == 'Completada'}">Completada</option>
+    </select><br><br>
+
+    <input type="text" name="observaciones" th:value="${orden.observaciones}"><br><br>
+
+    <!-- ===================== -->
+    <!-- DETALLES -->
+    <!-- ===================== -->
+
+    <h2>Detalles</h2>
+
+    <table border="1" id="tablaDetalles">
+        <thead>
+        <tr>
+            <th>Polo</th>
+            <th>Talla</th>
+            <th>Color</th>
+            <th>Cantidad</th>
+            <th>Acción</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <!-- FILAS EXISTENTES -->
+        <tr th:each="d, i : ${orden.detalles}">
+
+            <td>
+                <select th:name="|detalles[${i.index}].polo.id|">
+                    <option th:each="p : ${polos}"
+                            th:value="${p.id}"
+                            th:text="${p.nombre}"
+                            th:selected="${p.id == d.polo.id}">
+                    </option>
+                </select>
+            </td>
+
+            <td>
+                <select th:name="|detalles[${i.index}].talla.id|">
+                    <option th:each="t : ${tallas}"
+                            th:value="${t.id}"
+                            th:text="${t.nombre}"
+                            th:selected="${t.id == d.talla.id}">
+                    </option>
+                </select>
+            </td>
+
+            <td>
+                <select th:name="|detalles[${i.index}].color.id|">
+                    <option th:each="c : ${colores}"
+                            th:value="${c.id}"
+                            th:text="${c.nombre}"
+                            th:selected="${c.id == d.color.id}">
+                    </option>
+                </select>
+            </td>
+
+            <td>
+				<input type="number"
+				       th:name="|detalles[${i.index}].cantidad|"
+				       th:value="${d.cantidad}">
+            </td>
+
+            <td>
+                <button type="button" onclick="eliminarFila(this)">❌</button>
+            </td>
+
+        </tr>
+
+        </tbody>
+    </table>
+
+    <br>
+
+    <button type="button" onclick="agregarFila()">➕ Agregar detalle</button>
+
+    <br><br>
+
+    <button type="submit">Guardar cambios</button>
+	
+
+	<!-- ===================== -->
+	<!-- BOTONES -->
+	<!-- ===================== -->
+	<br>
+	<a href="/ordenes">⬅ Volver</a>
+
+</form>
+
+<!-- ===================== -->
+<!-- DATOS JS DESDE THYMELEAF -->
+<!-- ===================== -->
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+
+	let polos = /*[[${polos}]]*/ [];
+	let tallas = /*[[${tallas}]]*/ [];
+	let colores = /*[[${colores}]]*/ [];
+
+	let index = /*[[${orden.detalles.size()}]]*/ 0;
+
+	/*]]>*/
+</script>
+
+<!-- ===================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================== -->
+
+<script>
+
+function generarOpciones(lista) {
+    let opciones = '<option value="">Seleccione</option>';
+    lista.forEach(item => {
+        opciones += `<option value="${item.id}">${item.nombre}</option>`;
+    });
+    return opciones;
+}
+
+function agregarFila() {
+
+    const tbody = document.querySelector("#tablaDetalles tbody");
+
+    const fila = `
+        <tr>
+            <td>
+                <select name="detalles[${index}].polo.id">
+                    ${generarOpciones(polos)}
+                </select>
+            </td>
+
+            <td>
+                <select name="detalles[${index}].talla.id">
+                    ${generarOpciones(tallas)}
+                </select>
+            </td>
+
+            <td>
+                <select name="detalles[${index}].color.id">
+                    ${generarOpciones(colores)}
+                </select>
+            </td>
+
+            <td>
+                <input type="number" name="detalles[${index}].cantidad" min="1">
+            </td>
+
+            <td>
+                <button type="button" onclick="eliminarFila(this)">❌</button>
+            </td>
+        </tr>
+    `;
+
+    tbody.insertAdjacentHTML("beforeend", fila);
+    index++;
+}
+
+function eliminarFila(boton) {
+    boton.closest("tr").remove();
+    reindexar();
+}
+
+function reindexar() {
+
+    const filas = document.querySelectorAll("#tablaDetalles tbody tr");
+
+    let newIndex = 0;
+
+    filas.forEach(fila => {
+
+        const selects = fila.querySelectorAll("select");
+        const input = fila.querySelector("input");
+
+        selects[0].name = `detalles[${newIndex}].polo.id`;
+        selects[1].name = `detalles[${newIndex}].talla.id`;
+        selects[2].name = `detalles[${newIndex}].color.id`;
+
+        input.name = `detalles[${newIndex}].cantidad`;
+
+        newIndex++;
+    });
+
+    index = newIndex;
+}
+
+function validarFormulario() {
+
+    const filas = document.querySelectorAll("#tablaDetalles tbody tr");
+
+    if (filas.length === 0) {
+        alert("Debes agregar al menos un detalle");
+        return false;
+    }
+
+    return true;
+}
+
+</script>
+
+
+
+</body>
+</html>
